@@ -1,27 +1,28 @@
-// ----------------------------
-// To-Do App with Subtasks
-// ----------------------------
-
+// Select DOM elements
 const taskForm = document.getElementById("taskForm");
+const taskInput = document.getElementById("taskInput");
+const dueDateInput = document.getElementById("dueDate");
+const categoryInput = document.getElementById("category");
+const priorityInput = document.getElementById("priority");
 const taskList = document.getElementById("taskList");
 const clearCompletedBtn = document.getElementById("clearCompleted");
 const taskCounter = document.getElementById("taskCounter");
 
 let tasks = [];
 
-// Function to update the counter
+// Update task counter
 function updateCounter() {
-  const incomplete = tasks.filter(task => !task.completed).length;
-  taskCounter.textContent = `Tasks left: ${incomplete}`;
+  const remaining = tasks.filter(t => !t.completed).length;
+  taskCounter.textContent = `Tasks left: ${remaining}`;
 }
 
-// Function to render tasks
+// Render all tasks
 function renderTasks() {
   taskList.innerHTML = "";
-
   tasks.forEach((task, index) => {
     const li = document.createElement("li");
-    li.className = `task-item ${task.completed ? "completed" : ""}`;
+    li.className = "task-item";
+    if (task.completed) li.classList.add("completed");
 
     li.innerHTML = `
       <div class="task-header">
@@ -29,86 +30,87 @@ function renderTasks() {
         <span class="priority-badge ${task.priority.toLowerCase()}">${task.priority}</span>
       </div>
       <div class="task-main">
-        <input type="checkbox" class="complete-btn" ${task.completed ? "checked" : ""} data-index="${index}">
+        <input type="checkbox" ${task.completed ? "checked" : ""} onchange="toggleComplete(${index})">
         <span class="task-text">${task.text}</span>
-        <span class="due-date">Due: ${task.dueDate}</span>
+        <span class="due-date">${task.dueDate ? "Due: " + task.dueDate : ""}</span>
+        <button onclick="removeTask(${index})">❌</button>
       </div>
       <div class="subtasks">
         <ul>
-          ${task.subtasks.map((sub, subIndex) => `
+          ${task.subtasks.map((sub, i) => `
             <li>
-              <input type="checkbox" class="subtask-checkbox" data-task="${index}" data-sub="${subIndex}" ${sub.completed ? "checked" : ""}>
+              <input type="checkbox" ${sub.completed ? "checked" : ""} onchange="toggleSubtask(${index}, ${i})">
               <span class="${sub.completed ? "completed-sub" : ""}">${sub.text}</span>
             </li>
           `).join("")}
         </ul>
-        <input type="text" placeholder="Add subtask..." class="subtask-input" data-index="${index}">
+        <input type="text" placeholder="Add subtask..." onkeypress="addSubtask(event, ${index})">
       </div>
     `;
 
     taskList.appendChild(li);
   });
-
   updateCounter();
 }
 
-// Function to add a task
-taskForm.addEventListener("submit", function(e) {
+// Add a new task
+taskForm.addEventListener("submit", (e) => {
   e.preventDefault();
+  const text = taskInput.value.trim();
+  const dueDate = dueDateInput.value.trim();
+  const category = categoryInput.value;
+  const priority = priorityInput.value;
 
-  const taskInput = document.getElementById("taskInput").value.trim();
-  const category = document.getElementById("taskCategory").value;
-  const priority = document.getElementById("taskPriority").value;
-  const dueDate = document.getElementById("taskDueDate").value || "No due date";
+  if (text === "") return;
 
-  if (taskInput) {
-    tasks.push({
-      text: taskInput,
-      category,
-      priority,
-      dueDate,
-      completed: false,
-      subtasks: []
-    });
+  tasks.push({
+    text,
+    dueDate,
+    category,
+    priority,
+    completed: false,
+    subtasks: []
+  });
 
-    taskForm.reset();
-    renderTasks();
-  }
-});
-
-// Handle clicks (complete task, clear completed, add subtasks)
-taskList.addEventListener("click", function(e) {
-  if (e.target.classList.contains("complete-btn")) {
-    const index = e.target.dataset.index;
-    tasks[index].completed = e.target.checked;
-    renderTasks();
-  }
-});
-
-taskList.addEventListener("keypress", function(e) {
-  if (e.target.classList.contains("subtask-input") && e.key === "Enter") {
-    const index = e.target.dataset.index;
-    const subtaskText = e.target.value.trim();
-
-    if (subtaskText) {
-      tasks[index].subtasks.push({ text: subtaskText, completed: false });
-      e.target.value = "";
-      renderTasks();
-    }
-  }
-});
-
-taskList.addEventListener("change", function(e) {
-  if (e.target.classList.contains("subtask-checkbox")) {
-    const taskIndex = e.target.dataset.task;
-    const subIndex = e.target.dataset.sub;
-    tasks[taskIndex].subtasks[subIndex].completed = e.target.checked;
-    renderTasks();
-  }
-});
-
-// Clear completed tasks
-clearCompletedBtn.addEventListener("click", function() {
-  tasks = tasks.filter(task => !task.completed);
+  taskInput.value = "";
+  dueDateInput.value = "";
   renderTasks();
 });
+
+// Toggle complete task
+function toggleComplete(index) {
+  tasks[index].completed = !tasks[index].completed;
+  renderTasks();
+}
+
+// Remove task
+function removeTask(index) {
+  tasks.splice(index, 1);
+  renderTasks();
+}
+
+// Add subtask
+function addSubtask(e, taskIndex) {
+  if (e.key === "Enter") {
+    const text = e.target.value.trim();
+    if (text === "") return;
+    tasks[taskIndex].subtasks.push({ text, completed: false });
+    e.target.value = "";
+    renderTasks();
+  }
+}
+
+// Toggle subtask complete
+function toggleSubtask(taskIndex, subIndex) {
+  tasks[taskIndex].subtasks[subIndex].completed = !tasks[taskIndex].subtasks[subIndex].completed;
+  renderTasks();
+}
+
+// Clear completed tasks
+clearCompletedBtn.addEventListener("click", () => {
+  tasks = tasks.filter(t => !t.completed);
+  renderTasks();
+});
+
+// Initial render
+renderTasks();
