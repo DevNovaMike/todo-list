@@ -3,35 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>To-Do List with Subtasks</title>
+  <title>Todo List App</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app-container">
-    <h1>To-Do List</h1>
+    <h1>📋 Todo List</h1>
 
     <!-- Task Form -->
-    <form id="task-form">
-      <input type="text" id="task-input" placeholder="Enter task" required>
-      <input type="text" id="category-input" placeholder="Category">
-      <input type="text" id="taskDueDate" placeholder="YYYY-MM-DD">
-      <select id="priority-input">
-        <option value="low">Low</option>
-        <option value="medium" selected>Medium</option>
-        <option value="high">High</option>
+    <form id="taskForm" class="task-form">
+      <input type="text" id="taskInput" placeholder="Enter task..." required>
+      <input type="text" id="dueDate" placeholder="Due date (e.g. 2025-08-25)">
+      <select id="category">
+        <option value="Work">Work</option>
+        <option value="Personal">Personal</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Other">Other</option>
       </select>
-      <button type="submit">Add Task</button>
+      <select id="priority">
+        <option value="Low">Low</option>
+        <option value="Medium" selected>Medium</option>
+        <option value="High">High</option>
+      </select>
+      <button type="submit">➕ Add Task</button>
     </form>
 
-    <!-- Task Counter -->
-    <p id="task-counter">0 tasks left</p>
+    <!-- Counter + Clear Button -->
+    <div class="task-controls">
+      <span id="taskCounter">Tasks left: 0</span>
+      <button id="clearCompleted">🧹 Clear Completed</button>
+    </div>
 
     <!-- Task List -->
-    <ul id="task-list"></ul>
-
-    <button id="clear-completed">Clear Completed Tasks</button>
+    <ul id="taskList" class="task-list"></ul>
   </div>
 
-  <script src="script.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
