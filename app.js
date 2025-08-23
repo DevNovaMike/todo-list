@@ -1,90 +1,114 @@
-/* =========================================================
-   TO-DO APP — DAY 1 (Add + Display)
-   Sections:
-   1) DOM references
-   2) App state
-   3) Helpers
-   4) Render function
-   5) Event handlers
-   6) Init
-   ========================================================= */
+// ----------------------------
+// To-Do App with Subtasks
+// ----------------------------
 
-/* ===== 1) DOM REFERENCES ===== */
-const form = document.getElementById("taskForm");
-const input = document.getElementById("taskInput");
-const listEl = document.getElementById("taskList");
-const countEl = document.getElementById("taskCount");
-const statusEl = document.getElementById("status");
+const taskForm = document.getElementById("taskForm");
+const taskList = document.getElementById("taskList");
+const clearCompletedBtn = document.getElementById("clearCompleted");
+const taskCounter = document.getElementById("taskCounter");
 
-/* ===== 2) APP STATE =====
-   For Day 1 we keep tasks only in memory.
-   (Tomorrow we’ll keep this shape but add localStorage.) */
-let tasks = []; // each task: { id, text, createdAt }
+let tasks = [];
 
-/* ===== 3) HELPERS ===== */
-// create a task object with a unique id
-function makeTask(text) {
-  return {
-    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-    text: text.trim(),
-    createdAt: new Date().toISOString(),
-  };
+// Function to update the counter
+function updateCounter() {
+  const incomplete = tasks.filter(task => !task.completed).length;
+  taskCounter.textContent = `Tasks left: ${incomplete}`;
 }
 
-/* ===== 4) RENDER FUNCTION =====
-   Rebuilds the <ul> list from the tasks array. */
-function render() {
-  // build list item HTML for each task
-  listEl.innerHTML = tasks
-    .map(
-      (t) => `
-      <li class="task" data-id="${t.id}">
-        <span class="task__text" title="${escapeHtml(t.text)}">${escapeHtml(
-          t.text
-        )}</span>
-        <!-- Buttons come on Day 2 (complete/delete). -->
-      </li>`
-    )
-    .join("");
+// Function to render tasks
+function renderTasks() {
+  taskList.innerHTML = "";
 
-  // update count pill
-  countEl.textContent = String(tasks.length);
-}
+  tasks.forEach((task, index) => {
+    const li = document.createElement("li");
+    li.className = `task-item ${task.completed ? "completed" : ""}`;
 
-/* Small utility to avoid injecting raw HTML from user input */
-function escapeHtml(str) {
-  return str.replace(/[&<>"']/g, (ch) => {
-    const map = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" };
-    return map[ch];
+    li.innerHTML = `
+      <div class="task-header">
+        <span class="category-badge ${task.category.toLowerCase()}">${task.category}</span>
+        <span class="priority-badge ${task.priority.toLowerCase()}">${task.priority}</span>
+      </div>
+      <div class="task-main">
+        <input type="checkbox" class="complete-btn" ${task.completed ? "checked" : ""} data-index="${index}">
+        <span class="task-text">${task.text}</span>
+        <span class="due-date">Due: ${task.dueDate}</span>
+      </div>
+      <div class="subtasks">
+        <ul>
+          ${task.subtasks.map((sub, subIndex) => `
+            <li>
+              <input type="checkbox" class="subtask-checkbox" data-task="${index}" data-sub="${subIndex}" ${sub.completed ? "checked" : ""}>
+              <span class="${sub.completed ? "completed-sub" : ""}">${sub.text}</span>
+            </li>
+          `).join("")}
+        </ul>
+        <input type="text" placeholder="Add subtask..." class="subtask-input" data-index="${index}">
+      </div>
+    `;
+
+    taskList.appendChild(li);
   });
+
+  updateCounter();
 }
 
-/* ===== 5) EVENT HANDLERS ===== */
-// handle add task form submit
-form.addEventListener("submit", (e) => {
+// Function to add a task
+taskForm.addEventListener("submit", function(e) {
   e.preventDefault();
 
-  const text = input.value.trim();
-  // basic validation
-  if (!text) {
-    input.focus();
-    return;
+  const taskInput = document.getElementById("taskInput").value.trim();
+  const category = document.getElementById("taskCategory").value;
+  const priority = document.getElementById("taskPriority").value;
+  const dueDate = document.getElementById("taskDueDate").value || "No due date";
+
+  if (taskInput) {
+    tasks.push({
+      text: taskInput,
+      category,
+      priority,
+      dueDate,
+      completed: false,
+      subtasks: []
+    });
+
+    taskForm.reset();
+    renderTasks();
   }
-
-  // create + store task
-  const task = makeTask(text);
-  tasks.push(task);
-
-  // re-render UI
-  render();
-
-  // status for a11y and feedback
-  statusEl.textContent = `Added task: "${text}"`;
-
-  // reset input
-  form.reset();
-  input.focus();
 });
 
-/* ===== 6) INIT ===== */
-render(); // initial empty render
+// Handle clicks (complete task, clear completed, add subtasks)
+taskList.addEventListener("click", function(e) {
+  if (e.target.classList.contains("complete-btn")) {
+    const index = e.target.dataset.index;
+    tasks[index].completed = e.target.checked;
+    renderTasks();
+  }
+});
+
+taskList.addEventListener("keypress", function(e) {
+  if (e.target.classList.contains("subtask-input") && e.key === "Enter") {
+    const index = e.target.dataset.index;
+    const subtaskText = e.target.value.trim();
+
+    if (subtaskText) {
+      tasks[index].subtasks.push({ text: subtaskText, completed: false });
+      e.target.value = "";
+      renderTasks();
+    }
+  }
+});
+
+taskList.addEventListener("change", function(e) {
+  if (e.target.classList.contains("subtask-checkbox")) {
+    const taskIndex = e.target.dataset.task;
+    const subIndex = e.target.dataset.sub;
+    tasks[taskIndex].subtasks[subIndex].completed = e.target.checked;
+    renderTasks();
+  }
+});
+
+// Clear completed tasks
+clearCompletedBtn.addEventListener("click", function() {
+  tasks = tasks.filter(task => !task.completed);
+  renderTasks();
+});
