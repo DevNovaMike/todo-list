@@ -4,201 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>To-Do List with Subtasks</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #667eea, #764ba2);
-      color: #fff;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: rgba(0,0,0,0.3);
-      padding: 20px;
-      border-radius: 10px;
-    }
-    input, select, button {
-      padding: 8px;
-      margin: 5px;
-      border-radius: 5px;
-      border: none;
-    }
-    button {
-      cursor: pointer;
-      background: #4cafef;
-      color: white;
-    }
-    button:hover {
-      opacity: 0.9;
-    }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    li {
-      background: rgba(255,255,255,0.1);
-      margin: 8px 0;
-      padding: 10px;
-      border-radius: 8px;
-      text-align: left;
-    }
-    .badges {
-      display: inline-block;
-      margin-left: 10px;
-    }
-    .badge {
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 12px;
-      margin-left: 5px;
-      color: #fff;
-    }
-    .low { background: green; }
-    .medium { background: orange; }
-    .high { background: red; }
-    .subtask-list {
-      margin-top: 10px;
-      margin-left: 20px;
-    }
-    .subtask {
-      background: rgba(255,255,255,0.2);
-      margin: 5px 0;
-      padding: 6px;
-      border-radius: 6px;
-    }
-    .task-actions button {
-      margin-left: 8px;
-      background: #333;
-      font-size: 12px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>✅ To-Do List with Subtasks</h1>
-  <div class="container">
-    <!-- Task Input Section -->
-    <input type="text" id="taskInput" placeholder="Enter a task">
-    <input type="date" id="dueDateInput">
-    <select id="priorityInput">
-      <option value="low">Low</option>
-      <option value="medium">Medium</option>
-      <option value="high">High</option>
-    </select>
-    <input type="text" id="categoryInput" placeholder="Category">
-    <button onclick="addTask()">Add Task</button>
-    
+  <div class="app-container">
+    <h1>To-Do List</h1>
+
+    <!-- Task Form -->
+    <form id="task-form">
+      <input type="text" id="task-input" placeholder="Enter task" required>
+      <input type="text" id="category-input" placeholder="Category">
+      <input type="text" id="due-date-input" placeholder="Due Date (YYYY-MM-DD)">
+      <select id="priority-input">
+        <option value="low">Low</option>
+        <option value="medium" selected>Medium</option>
+        <option value="high">High</option>
+      </select>
+      <button type="submit">Add Task</button>
+    </form>
+
     <!-- Task Counter -->
-    <p id="taskCounter">0 tasks left</p>
-    
+    <p id="task-counter">0 tasks left</p>
+
     <!-- Task List -->
-    <ul id="taskList"></ul>
-    
-    <!-- Clear Completed -->
-    <button onclick="clearCompleted()">Clear Completed Tasks</button>
+    <ul id="task-list"></ul>
+
+    <button id="clear-completed">Clear Completed Tasks</button>
   </div>
 
-  <script>
-    let tasks = [];
-
-    function updateCounter() {
-      const remaining = tasks.filter(t => !t.completed).length;
-      document.getElementById("taskCounter").innerText = `${remaining} task(s) left`;
-    }
-
-    function addTask() {
-      const taskText = document.getElementById("taskInput").value.trim();
-      const dueDate = document.getElementById("dueDateInput").value;
-      const priority = document.getElementById("priorityInput").value;
-      const category = document.getElementById("categoryInput").value.trim();
-
-      if (!taskText) return;
-
-      tasks.push({
-        text: taskText,
-        dueDate,
-        priority,
-        category,
-        completed: false,
-        subtasks: []
-      });
-
-      document.getElementById("taskInput").value = "";
-      document.getElementById("dueDateInput").value = "";
-      document.getElementById("categoryInput").value = "";
-      renderTasks();
-    }
-
-    function addSubtask(index) {
-      const subtaskText = prompt("Enter subtask:");
-      if (!subtaskText) return;
-      tasks[index].subtasks.push({ text: subtaskText, completed: false });
-      renderTasks();
-    }
-
-    function toggleTaskCompletion(index) {
-      tasks[index].completed = !tasks[index].completed;
-      renderTasks();
-    }
-
-    function toggleSubtaskCompletion(taskIndex, subIndex) {
-      tasks[taskIndex].subtasks[subIndex].completed = !tasks[taskIndex].subtasks[subIndex].completed;
-      renderTasks();
-    }
-
-    function clearCompleted() {
-      tasks = tasks.filter(task => !task.completed);
-      renderTasks();
-    }
-
-    function renderTasks() {
-      const list = document.getElementById("taskList");
-      list.innerHTML = "";
-
-      tasks.forEach((task, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <span style="text-decoration:${task.completed ? 'line-through' : 'none'}">
-            ${task.text} (Due: ${task.dueDate || "No date"})
-          </span>
-          <div class="badges">
-            <span class="badge ${task.priority}">${task.priority}</span>
-            ${task.category ? `<span class="badge">${task.category}</span>` : ""}
-          </div>
-          <div class="task-actions">
-            <button onclick="toggleTaskCompletion(${index})">✔ Complete</button>
-            <button onclick="addSubtask(${index})">➕ Subtask</button>
-          </div>
-        `;
-
-        // Subtasks
-        if (task.subtasks.length > 0) {
-          const subList = document.createElement("ul");
-          subList.className = "subtask-list";
-          task.subtasks.forEach((sub, subIndex) => {
-            const subLi = document.createElement("li");
-            subLi.className = "subtask";
-            subLi.innerHTML = `
-              <span style="text-decoration:${sub.completed ? 'line-through' : 'none'}">
-                ${sub.text}
-              </span>
-              <button onclick="toggleSubtaskCompletion(${index}, ${subIndex})">✔</button>
-            `;
-            subList.appendChild(subLi);
-          });
-          li.appendChild(subList);
-        }
-
-        list.appendChild(li);
-      });
-
-      updateCounter();
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
