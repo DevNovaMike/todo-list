@@ -1,4 +1,4 @@
-//* ---------- Reset ---------- */
+/* ---------- Reset ---------- */
 * {
   margin: 0;
   padding: 0;
@@ -17,7 +17,7 @@ body {
 }
 
 /* ---------- App Container ---------- */
-.app-container {
+.container {
   background: #fff;
   padding: 25px;
   border-radius: 16px;
@@ -28,8 +28,17 @@ body {
 
 h1 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   color: #444;
+}
+
+/* ---------- Task Counter ---------- */
+.task-counter {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #555;
 }
 
 /* ---------- Task Form ---------- */
@@ -65,28 +74,6 @@ h1 {
   background: #5563c1;
 }
 
-/* ---------- Task Controls ---------- */
-.task-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-#clearCompleted {
-  background: #ff5e5e;
-  color: #fff;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-#clearCompleted:hover {
-  background: #e04a4a;
-}
-
 /* ---------- Task List ---------- */
 .task-list {
   list-style: none;
@@ -120,6 +107,7 @@ h1 {
   gap: 6px;
 }
 
+/* ---------- Badge Colors ---------- */
 .badge {
   padding: 3px 8px;
   border-radius: 6px;
@@ -128,19 +116,18 @@ h1 {
   font-weight: 500;
 }
 
-/* ---------- Badge Colors ---------- */
 /* Categories */
 .badge.work { background: #007bff; }      /* Blue */
 .badge.personal { background: #28a745; }  /* Green */
-.badge.shopping { background: #ff9800; }  /* Orange */
+.badge.school { background: #17a2b8; }    /* Teal */
 .badge.other { background: #6c757d; }     /* Gray */
 
 /* Priorities */
 .badge.low { background: #17a2b8; }       /* Teal */
-.badge.medium { background: #ffc107; }    /* Yellow */
+.badge.medium { background: #ffc107; color: #333; } /* Yellow */
 .badge.high { background: #dc3545; }      /* Red */
 
-/* ---------- Complete Button ---------- */
+/* Complete Button */
 .complete-btn {
   background: #28a745;
   color: #fff;
@@ -160,6 +147,23 @@ h1 {
 .completed .task-title {
   text-decoration: line-through;
   color: #777;
+}
+
+/* Clear Completed */
+#clearCompleted {
+  width: 100%;
+  margin-top: 10px;
+  background: #ff5e5e;
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#clearCompleted:hover {
+  background: #e04a4a;
 }
 
 /* ---------- Responsive Design ---------- */
