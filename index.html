@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>To-Do List App</title>
+  <title>Todo List App</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -17,32 +17,19 @@
 
     <!-- Task Form -->
     <form class="task-form">
-      <input 
-        type="text" 
-        id="taskInput" 
-        placeholder="Enter a new task..." 
-        required 
-      />
-
+      <input type="text" id="taskInput" placeholder="Enter a new task..." required />
       <select id="categorySelect">
         <option value="Work">Work</option>
         <option value="Personal">Personal</option>
         <option value="School">School</option>
         <option value="Other">Other</option>
       </select>
-
       <select id="prioritySelect">
         <option value="Low">Low Priority</option>
         <option value="Medium">Medium Priority</option>
         <option value="High">High Priority</option>
       </select>
-
-      <input 
-        type="text" 
-        id="dateInput" 
-        placeholder="YYYY-MM-DD (optional)" 
-      />
-
+      <input type="text" id="dateInput" placeholder="YYYY-MM-DD (optional)" />
       <button type="submit">Add Task</button>
     </form>
 
