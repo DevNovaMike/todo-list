@@ -88,6 +88,11 @@ h1 {
   flex-direction: column;
   gap: 6px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.task-list li:hover {
+  transform: translateY(-2px);
 }
 
 .task-header {
@@ -117,15 +122,15 @@ h1 {
 }
 
 /* Categories */
-.badge.work { background: #007bff; }      /* Blue */
-.badge.personal { background: #28a745; }  /* Green */
-.badge.school { background: #17a2b8; }    /* Teal */
-.badge.other { background: #6c757d; }     /* Gray */
+.badge.work { background: #007bff; }      
+.badge.personal { background: #28a745; }  
+.badge.school { background: #17a2b8; }    
+.badge.other { background: #6c757d; }     
 
 /* Priorities */
-.badge.low { background: #17a2b8; }       /* Teal */
-.badge.medium { background: #ffc107; color: #333; } /* Yellow */
-.badge.high { background: #dc3545; }      /* Red */
+.badge.low { background: #17a2b8; }       
+.badge.medium { background: #ffc107; color: #333; } 
+.badge.high { background: #dc3545; }      
 
 /* Complete Button */
 .complete-btn {
@@ -147,6 +152,39 @@ h1 {
 .completed .task-title {
   text-decoration: line-through;
   color: #777;
+}
+
+/* Subtasks */
+.subtasks {
+  margin-left: 25px;
+  margin-top: 10px;
+  padding-left: 10px;
+  border-left: 2px dashed #ccc;
+}
+
+.subtasks ul {
+  list-style: none;
+  padding: 0;
+}
+
+.subtasks li {
+  display: flex;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.subtasks input[type="text"] {
+  margin-top: 8px;
+  padding: 6px;
+  font-size: 14px;
+  width: 90%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.completed-sub {
+  text-decoration: line-through;
+  color: gray;
 }
 
 /* Clear Completed */
