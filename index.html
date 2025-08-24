@@ -3,21 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Todo List App</title>
+  <title>Advanced Todo List</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>My To-Do List</h1>
+    <h1>My Advanced Todo List</h1>
 
     <!-- Task Counter -->
     <div class="task-counter">
       <span id="taskCounter">Tasks left: 0</span>
     </div>
 
+    <!-- Search & Sort -->
+    <div class="task-controls">
+      <input type="text" id="searchInput" placeholder="Search tasks..." />
+      <select id="sortSelect">
+        <option value="default">Sort by</option>
+        <option value="priority">Priority</option>
+        <option value="dueDate">Due Date</option>
+        <option value="category">Category</option>
+      </select>
+    </div>
+
     <!-- Task Form -->
     <form class="task-form">
       <input type="text" id="taskInput" placeholder="Enter a new task..." required />
+      <input type="text" id="tagsInput" placeholder="Tags (comma separated)" />
       <select id="categorySelect">
         <option value="Work">Work</option>
         <option value="Personal">Personal</option>
@@ -43,3 +55,4 @@
   <script src="app.js"></script>
 </body>
 </html>
+
