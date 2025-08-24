@@ -24,6 +24,7 @@ body {
   box-shadow: 0 6px 15px rgba(0,0,0,0.2);
   width: 100%;
   max-width: 600px;
+  transition: all 0.3s ease;
 }
 
 h1 {
@@ -36,9 +37,25 @@ h1 {
 .task-counter {
   text-align: center;
   font-weight: 600;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-size: 16px;
   color: #555;
+}
+
+/* ---------- Task Controls ---------- */
+.task-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.task-controls input,
+.task-controls select {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
 }
 
 /* ---------- Task Form ---------- */
@@ -88,13 +105,23 @@ h1 {
   flex-direction: column;
   gap: 6px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .task-list li:hover {
   transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.15);
 }
 
+/* Highlight if due soon or overdue */
+.task-due-soon {
+  border-left: 4px solid #ffc107;
+}
+.task-overdue {
+  border-left: 4px solid #dc3545;
+}
+
+/* Task header */
 .task-header {
   display: flex;
   justify-content: space-between;
@@ -104,15 +131,17 @@ h1 {
 .task-title {
   font-size: 16px;
   font-weight: 600;
+  transition: all 0.3s ease;
 }
 
+/* Task meta */
 .task-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
 
-/* ---------- Badge Colors ---------- */
+/* Badges */
 .badge {
   padding: 3px 8px;
   border-radius: 6px;
@@ -127,12 +156,12 @@ h1 {
 .badge.school { background: #17a2b8; }    
 .badge.other { background: #6c757d; }     
 
-/* Priorities */
+/* Priorities with glow */
 .badge.low { background: #17a2b8; }       
 .badge.medium { background: #ffc107; color: #333; } 
-.badge.high { background: #dc3545; }      
+.badge.high { background: #dc3545; box-shadow: 0 0 6px #dc3545; }      
 
-/* Complete Button */
+/* Complete button */
 .complete-btn {
   background: #28a745;
   color: #fff;
@@ -141,14 +170,13 @@ h1 {
   border-radius: 6px;
   cursor: pointer;
   font-size: 12px;
-  transition: 0.3s;
+  transition: all 0.3s;
 }
 
 .complete-btn:hover {
   background: #218838;
 }
 
-/* Completed tasks style */
 .completed .task-title {
   text-decoration: line-through;
   color: #777;
@@ -197,7 +225,7 @@ h1 {
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s;
 }
 
 #clearCompleted:hover {
@@ -209,10 +237,14 @@ h1 {
   .task-form {
     flex-direction: column;
   }
-  
+  .task-controls {
+    flex-direction: column;
+  }
   .task-form input,
   .task-form select,
-  .task-form button {
+  .task-form button,
+  .task-controls input,
+  .task-controls select {
     width: 100%;
   }
 }
