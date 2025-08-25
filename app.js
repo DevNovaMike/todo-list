@@ -1,16 +1,53 @@
+// Select Elements
 const taskInput = document.getElementById("taskInput");
-const dateInput = document.getElementById("dateInput");
-const priorityInput = document.getElementById("priorityInput");
-const tagInput = document.getElementById("tagInput");
+const dueDateInput = document.getElementById("dueDate");
+const priorityInput = document.getElementById("priority");
+const categoryInput = document.getElementById("category");
+const tagsInput = document.getElementById("tags");
 const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
 const clearCompletedBtn = document.getElementById("clearCompletedBtn");
 const taskCounter = document.getElementById("taskCounter");
 const searchInput = document.getElementById("searchInput");
-const sortInput = document.getElementById("sortInput");
+const sortTasks = document.getElementById("sortTasks");
 
-let tasks = [];
+// Load tasks from localStorage
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+renderTasks();
 
+// Save to localStorage
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+// Add Task
+addTaskBtn.addEventListener("click", () => {
+  const taskText = taskInput.value.trim();
+  if (!taskText) return;
+
+  const task = {
+    id: Date.now(),
+    text: taskText,
+    dueDate: dueDateInput.value || null,
+    priority: priorityInput.value,
+    category: categoryInput.value || "General",
+    tags: tagsInput.value.split(",").map(t => t.trim()).filter(t => t),
+    completed: false,
+    subtasks: []
+  };
+
+  tasks.push(task);
+  saveTasks();
+  renderTasks();
+
+  // Clear inputs
+  taskInput.value = "";
+  dueDateInput.value = "";
+  categoryInput.value = "";
+  tagsInput.value = "";
+});
+
+// Render Tasks
 function renderTasks() {
   taskList.innerHTML = "";
 
@@ -18,91 +55,99 @@ function renderTasks() {
     task.text.toLowerCase().includes(searchInput.value.toLowerCase())
   );
 
-  if (sortInput.value === "date") {
-    filteredTasks.sort((a,b) => (a.date || "").localeCompare(b.date || ""));
-  } else if (sortInput.value === "priority") {
-    const order = {high:1, medium:2, low:3};
-    filteredTasks.sort((a,b) => order[a.priority] - order[b.priority]);
-  } else if (sortInput.value === "az") {
-    filteredTasks.sort((a,b) => a.text.localeCompare(b.text));
+  // Sorting
+  if (sortTasks.value === "date") {
+    filteredTasks.sort((a, b) => (a.dueDate || "").localeCompare(b.dueDate || ""));
+  } else if (sortTasks.value === "priority") {
+    const order = { high: 1, medium: 2, low: 3 };
+    filteredTasks.sort((a, b) => order[a.priority] - order[b.priority]);
+  } else if (sortTasks.value === "category") {
+    filteredTasks.sort((a, b) => a.category.localeCompare(b.category));
   }
 
-  filteredTasks.forEach((task, index) => {
+  filteredTasks.forEach(task => {
     const li = document.createElement("li");
     li.className = "task";
-    if (task.completed) li.classList.add("completed");
 
-    // Highlight due today
-    const today = new Date().toISOString().split("T")[0];
-    if (task.date === today) li.classList.add("due-today");
+    // Task header
+    const header = document.createElement("div");
+    header.className = "task-header";
 
-    // Task main row
-    const mainDiv = document.createElement("div");
-    mainDiv.className = "task-main";
+    const title = document.createElement("span");
+    title.className = "task-title";
+    title.textContent = task.text;
 
-    const text = document.createElement("span");
-    text.className = "task-text";
-    text.textContent = task.text;
+    // Badges
+    const badges = document.createElement("div");
+    const priorityBadge = document.createElement("span");
+    priorityBadge.className = `badge priority-${task.priority}`;
+    priorityBadge.textContent = task.priority;
 
-    const badges = document.createElement("span");
-    badges.innerHTML = `
-      <span class="badge priority-${task.priority}">${task.priority}</span>
-      ${task.date ? `<span class="badge">${task.date}</span>` : ""}
-    `;
+    const categoryBadge = document.createElement("span");
+    categoryBadge.className = "badge category-badge";
+    categoryBadge.textContent = task.category;
 
-    mainDiv.appendChild(text);
-    mainDiv.appendChild(badges);
+    badges.appendChild(priorityBadge);
+    badges.appendChild(categoryBadge);
 
-    // Tags
-    const tagDiv = document.createElement("div");
-    tagDiv.className = "tags";
-    task.tags.forEach(t => {
-      const span = document.createElement("span");
-      span.className = "tag";
-      span.textContent = t;
-      tagDiv.appendChild(span);
+    header.appendChild(title);
+    header.appendChild(badges);
+
+    // Due Date
+    if (task.dueDate) {
+      const due = document.createElement("div");
+      due.textContent = "Due: " + task.dueDate;
+      if (task.dueDate === new Date().toISOString().split("T")[0]) {
+        due.style.color = "red";
+        due.style.fontWeight = "bold";
+      }
+      li.appendChild(due);
+    }
+
+    // Subtasks
+    const subtaskList = document.createElement("ul");
+    subtaskList.className = "subtask-list";
+    task.subtasks.forEach(st => {
+      const subLi = document.createElement("li");
+      subLi.className = "subtask";
+      subLi.textContent = st;
+      subtaskList.appendChild(subLi);
     });
 
-    // Buttons
-    const completeBtn = document.createElement("button");
-    completeBtn.textContent = "✔️ Complete";
-    completeBtn.onclick = () => {
-      task.completed = !task.completed;
-      renderTasks();
-    };
-
-    const subtaskBtn = document.createElement("button");
-    subtaskBtn.textContent = "➕ Add Subtask";
-    subtaskBtn.onclick = () => {
-      const st = prompt("Enter subtask:");
-      if (st) {
-        task.subtasks.push({text: st, done: false});
+    const subtaskInput = document.createElement("div");
+    subtaskInput.className = "subtask-input";
+    const subInput = document.createElement("input");
+    subInput.placeholder = "Add subtask...";
+    const subBtn = document.createElement("button");
+    subBtn.textContent = "+";
+    subBtn.onclick = () => {
+      if (subInput.value.trim()) {
+        task.subtasks.push(subInput.value.trim());
+        saveTasks();
         renderTasks();
       }
     };
+    subtaskInput.appendChild(subInput);
+    subtaskInput.appendChild(subBtn);
 
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "❌ Delete";
-    deleteBtn.onclick = () => {
-      tasks.splice(index, 1);
+    // Complete Button
+    const completeBtn = document.createElement("button");
+    completeBtn.textContent = task.completed ? "Undo" : "Complete";
+    completeBtn.onclick = () => {
+      task.completed = !task.completed;
+      saveTasks();
       renderTasks();
     };
 
-    // Subtasks
-    const subtasksUl = document.createElement("ul");
-    subtasksUl.className = "subtasks";
-    task.subtasks.forEach((st, si) => {
-      const stLi = document.createElement("li");
-      stLi.textContent = st.text;
-      subtasksUl.appendChild(stLi);
-    });
-
-    li.appendChild(mainDiv);
-    li.appendChild(tagDiv);
-    li.appendChild(subtasksUl);
+    li.appendChild(header);
+    li.appendChild(subtaskList);
+    li.appendChild(subtaskInput);
     li.appendChild(completeBtn);
-    li.appendChild(subtaskBtn);
-    li.appendChild(deleteBtn);
+
+    if (task.completed) {
+      li.style.textDecoration = "line-through";
+      li.style.opacity = "0.6";
+    }
 
     taskList.appendChild(li);
   });
@@ -110,37 +155,19 @@ function renderTasks() {
   updateCounter();
 }
 
-function updateCounter() {
-  const remaining = tasks.filter(t => !t.completed).length;
-  taskCounter.textContent = `${remaining} task${remaining !== 1 ? "s" : ""} left`;
-}
-
-addTaskBtn.addEventListener("click", () => {
-  const text = taskInput.value.trim();
-  if (!text) return;
-
-  tasks.push({
-    text,
-    date: dateInput.value.trim(),
-    priority: priorityInput.value,
-    tags: tagInput.value ? tagInput.value.split(",").map(t => t.trim()) : [],
-    completed: false,
-    subtasks: []
-  });
-
-  taskInput.value = "";
-  dateInput.value = "";
-  tagInput.value = "";
-
-  renderTasks();
-});
-
+// Clear Completed
 clearCompletedBtn.addEventListener("click", () => {
-  tasks = tasks.filter(t => !t.completed);
+  tasks = tasks.filter(task => !task.completed);
+  saveTasks();
   renderTasks();
 });
 
+// Search + Sort events
 searchInput.addEventListener("input", renderTasks);
-sortInput.addEventListener("change", renderTasks);
+sortTasks.addEventListener("change", renderTasks);
 
-renderTasks();
+// Update Counter
+function updateCounter() {
+  const left = tasks.filter(t => !t.completed).length;
+  taskCounter.textContent = `${left} tasks left`;
+}
