@@ -1,58 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Advanced Todo List</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List App</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>My Todo List</h1>
+  <div class="app-container">
+    <h1>🔥 My Todo List</h1>
+
+    <!-- Task Input -->
+    <div class="task-input">
+      <input type="text" id="taskInput" placeholder="Enter a new task...">
+      <input type="text" id="taskCategory" placeholder="Category (e.g. Work, Personal)">
+      <input type="text" id="taskDueDate" placeholder="YYYY-MM-DD">
+      <select id="taskPriority">
+        <option value="low">Low Priority</option>
+        <option value="medium">Medium Priority</option>
+        <option value="high">High Priority</option>
+      </select>
+      <button id="addTaskBtn">Add Task</button>
+    </div>
+
+    <!-- Search & Sorting -->
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search tasks...">
+      <select id="sortSelect">
+        <option value="date">Sort by Date</option>
+        <option value="priority">Sort by Priority</option>
+        <option value="category">Sort by Category</option>
+      </select>
+    </div>
 
     <!-- Task Counter -->
-    <div class="task-counter">
-      <span id="taskCounter">Tasks left: 0</span>
-    </div>
-
-    <!-- Search & Sort -->
-    <div class="task-controls">
-      <input type="text" id="searchInput" placeholder="Search tasks..." />
-      <select id="sortSelect">
-        <option value="default">Sort by</option>
-        <option value="priority">Priority</option>
-        <option value="dueDate">Due Date</option>
-        <option value="category">Category</option>
-      </select>
-    </div>
-
-    <!-- Task Form -->
-    <form class="task-form">
-      <input type="text" id="taskInput" placeholder="Enter a new task..." required />
-      <input type="text" id="tagsInput" placeholder="Tags (comma separated)" />
-      <select id="categorySelect">
-        <option value="Work">Work</option>
-        <option value="Personal">Personal</option>
-        <option value="School">School</option>
-        <option value="Other">Other</option>
-      </select>
-      <select id="prioritySelect">
-        <option value="Low">Low Priority</option>
-        <option value="Medium">Medium Priority</option>
-        <option value="High">High Priority</option>
-      </select>
-      <input type="text" id="dateInput" placeholder="YYYY-MM-DD (optional)" />
-      <button type="submit">Add Task</button>
-    </form>
+    <p id="taskCounter">0 tasks remaining</p>
 
     <!-- Task List -->
-    <ul class="task-list"></ul>
+    <ul id="taskList"></ul>
 
-    <!-- Clear Completed Button -->
-    <button id="clearCompleted">Clear Completed Tasks</button>
+    <!-- Clear Button -->
+    <button id="clearCompletedBtn">Clear Completed Tasks</button>
   </div>
 
   <script src="app.js"></script>
 </body>
 </html>
-
