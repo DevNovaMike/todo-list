@@ -19,9 +19,15 @@
       <div id="progressBar"></div>
     </div>
 
+    <!-- Task Streak -->
+    <div class="streak-container">
+      <span id="taskStreak">Tasks Completed: 0</span>
+    </div>
+
     <!-- Add Task Form -->
     <div class="task-form">
       <input type="text" id="taskInput" placeholder="Enter a new task..." />
+      <textarea id="taskDesc" placeholder="Task description (optional)"></textarea>
       <input type="text" id="dueDate" placeholder="Due date (YYYY-MM-DD)" />
       <select id="priority">
         <option value="low">Low Priority</option>
@@ -29,17 +35,19 @@
         <option value="high">High Priority</option>
       </select>
       <input type="text" id="categoryInput" placeholder="Category (e.g. Work)" />
+      <select id="recurring">
+        <option value="none">No Recurrence</option>
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+      </select>
       <button id="addTaskBtn">Add Task</button>
     </div>
 
-    <!-- Sorting -->
-    <div class="sorting">
-      <label for="sortOptions">Sort by: </label>
-      <select id="sortOptions">
-        <option value="date">Due Date</option>
-        <option value="priority">Priority</option>
-        <option value="category">Category</option>
-      </select>
+    <!-- Export / Import -->
+    <div class="export-import">
+      <button id="exportTasks">Export Tasks</button>
+      <input type="file" id="importTasks" />
     </div>
 
     <!-- Task List -->
