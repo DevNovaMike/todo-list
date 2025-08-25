@@ -1,250 +1,154 @@
-/* ---------- Reset ---------- */
-* {
+/* Dark Bold Theme */
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+  color: #f1f1f1;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: #333;
-  min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 20px;
+  min-height: 100vh;
 }
 
-/* ---------- App Container ---------- */
-.container {
-  background: #fff;
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-  width: 100%;
+.app-container {
+  width: 95%;
   max-width: 600px;
-  transition: all 0.3s ease;
+  background: #111;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+  margin-top: 20px;
 }
 
 h1 {
   text-align: center;
-  margin-bottom: 15px;
-  color: #444;
+  color: #ff4444;
+  margin-bottom: 20px;
 }
 
-/* ---------- Task Counter ---------- */
-.task-counter {
-  text-align: center;
-  font-weight: 600;
-  margin-bottom: 10px;
-  font-size: 16px;
-  color: #555;
-}
-
-/* ---------- Task Controls ---------- */
-.task-controls {
+/* Task Input Section */
+.task-input {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.task-controls input,
-.task-controls select {
-  flex: 1;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-/* ---------- Task Form ---------- */
-.task-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.task-form input,
-.task-form select,
-.task-form button {
+.task-input input, .task-input select, .task-input button {
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: none;
   font-size: 14px;
 }
 
-.task-form input {
-  flex: 1 1 150px;
-}
-
-.task-form button {
-  background: #667eea;
-  color: #fff;
-  border: none;
+.task-input button {
+  background: #ff4444;
+  color: white;
   cursor: pointer;
   transition: 0.3s;
 }
 
-.task-form button:hover {
-  background: #5563c1;
+.task-input button:hover {
+  background: #ff2222;
 }
 
-/* ---------- Task List ---------- */
-.task-list {
-  list-style: none;
-}
-
-.task-list li {
-  background: #f9f9f9;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 10px;
+/* Controls */
+.controls {
+  margin: 15px 0;
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+  gap: 10px;
 }
 
-.task-list li:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 10px rgba(0,0,0,0.15);
-}
-
-/* Highlight if due soon or overdue */
-.task-due-soon {
-  border-left: 4px solid #ffc107;
-}
-.task-overdue {
-  border-left: 4px solid #dc3545;
-}
-
-/* Task header */
-.task-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.task-title {
-  font-size: 16px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-/* Task meta */
-.task-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-/* Badges */
-.badge {
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  color: #fff;
-  font-weight: 500;
-}
-
-/* Categories */
-.badge.work { background: #007bff; }      
-.badge.personal { background: #28a745; }  
-.badge.school { background: #17a2b8; }    
-.badge.other { background: #6c757d; }     
-
-/* Priorities with glow */
-.badge.low { background: #17a2b8; }       
-.badge.medium { background: #ffc107; color: #333; } 
-.badge.high { background: #dc3545; box-shadow: 0 0 6px #dc3545; }      
-
-/* Complete button */
-.complete-btn {
-  background: #28a745;
-  color: #fff;
+.controls input, .controls select {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
   border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: all 0.3s;
 }
 
-.complete-btn:hover {
-  background: #218838;
-}
-
-.completed .task-title {
-  text-decoration: line-through;
-  color: #777;
-}
-
-/* Subtasks */
-.subtasks {
-  margin-left: 25px;
-  margin-top: 10px;
-  padding-left: 10px;
-  border-left: 2px dashed #ccc;
-}
-
-.subtasks ul {
+/* Task List */
+#taskList {
   list-style: none;
   padding: 0;
 }
 
-.subtasks li {
+.task {
+  background: #222;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 10px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin: 4px 0;
+  transition: 0.3s;
+  position: relative;
 }
 
-.subtasks input[type="text"] {
-  margin-top: 8px;
-  padding: 6px;
-  font-size: 14px;
-  width: 90%;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+.task:hover {
+  transform: scale(1.02);
+  background: #2a2a2a;
 }
 
-.completed-sub {
+.task.completed {
   text-decoration: line-through;
-  color: gray;
+  opacity: 0.6;
 }
 
-/* Clear Completed */
-#clearCompleted {
-  width: 100%;
-  margin-top: 10px;
-  background: #ff5e5e;
-  color: #fff;
-  padding: 10px;
+/* Category & Priority Badges */
+.badge {
+  padding: 4px 8px;
   border-radius: 8px;
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+.category-badge {
+  background: #444;
+  color: #fff;
+}
+
+.priority-low {
+  background: #2ecc71;
+  box-shadow: 0 0 10px #2ecc71;
+}
+
+.priority-medium {
+  background: #f1c40f;
+  box-shadow: 0 0 10px #f1c40f;
+}
+
+.priority-high {
+  background: #e74c3c;
+  box-shadow: 0 0 10px #e74c3c;
+}
+
+/* Buttons inside tasks */
+.task button {
+  background: none;
   border: none;
   cursor: pointer;
-  transition: all 0.3s;
+  color: #ff4444;
+  font-size: 14px;
+  margin-left: 10px;
 }
 
-#clearCompleted:hover {
-  background: #e04a4a;
+.task button:hover {
+  color: #ff8888;
 }
 
-/* ---------- Responsive Design ---------- */
+/* Task Counter */
+#taskCounter {
+  margin: 10px 0;
+  font-weight: bold;
+  text-align: center;
+  color: #ff4444;
+}
+
+/* Responsive */
 @media (max-width: 600px) {
-  .task-form {
+  .controls {
     flex-direction: column;
   }
-  .task-controls {
+  .task-input {
     flex-direction: column;
-  }
-  .task-form input,
-  .task-form select,
-  .task-form button,
-  .task-controls input,
-  .task-controls select {
-    width: 100%;
   }
 }
