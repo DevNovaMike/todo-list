@@ -3,46 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modern Minimal To-Do App</title>
+  <title>Minimal To-Do App</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- App Container -->
   <div class="app-container">
-    <h1 class="app-title">📝 My To-Do List</h1>
+    <h1>My To-Do List</h1>
 
     <!-- Task Input Section -->
     <div class="task-input">
-      <input type="text" id="taskInput" placeholder="Enter task..." />
-      <input type="text" id="dateInput" placeholder="YYYY-MM-DD" />
-      <select id="priorityInput">
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
+      <input type="text" id="taskInput" placeholder="Enter a new task...">
+      <input type="text" id="dueDate" placeholder="Due date (YYYY-MM-DD)">
+      <select id="priority">
+        <option value="low">Low Priority</option>
+        <option value="medium">Medium Priority</option>
+        <option value="high">High Priority</option>
       </select>
-      <input type="text" id="tagInput" placeholder="Tags (comma separated)" />
-      <button id="addTaskBtn">➕ Add Task</button>
+      <input type="text" id="category" placeholder="Category (e.g. Work, Study)">
+      <input type="text" id="tags" placeholder="Tags (comma separated)">
+      <button id="addTaskBtn">Add Task</button>
     </div>
 
-    <!-- Search & Sort -->
+    <!-- Search + Sort -->
     <div class="controls">
-      <input type="text" id="searchInput" placeholder="🔍 Search tasks..." />
-      <select id="sortInput">
+      <input type="text" id="searchInput" placeholder="Search tasks...">
+      <select id="sortTasks">
         <option value="date">Sort by Date</option>
         <option value="priority">Sort by Priority</option>
-        <option value="az">Sort A-Z</option>
+        <option value="category">Sort by Category</option>
       </select>
     </div>
-
-    <!-- Task Counter -->
-    <p id="taskCounter">0 tasks left</p>
 
     <!-- Task List -->
     <ul id="taskList"></ul>
 
-    <!-- Footer Buttons -->
-    <div class="footer-buttons">
-      <button id="clearCompletedBtn">🧹 Clear Completed</button>
+    <!-- Footer Controls -->
+    <div class="footer-controls">
+      <button id="clearCompletedBtn">Clear Completed</button>
+      <span id="taskCounter">0 tasks left</span>
     </div>
   </div>
 
