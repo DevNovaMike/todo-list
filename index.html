@@ -1,59 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Minimal To-Do App</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern To-Do List</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app-container">
     <header>
       <h1>My To-Do List</h1>
-      <button id="darkModeToggle">Toggle Dark Mode</button>
-      <input type="text" id="searchBar" placeholder="Search tasks..." />
+      <button id="darkModeToggle">🌙 Dark Mode</button>
     </header>
 
-    <!-- Progress Bar -->
-    <div class="progress-container">
-      <div id="progressBar"></div>
-    </div>
-
-    <!-- Task Streak -->
-    <div class="streak-container">
-      <span id="taskStreak">Tasks Completed: 0</span>
-    </div>
-
-    <!-- Add Task Form -->
-    <div class="task-form">
-      <input type="text" id="taskInput" placeholder="Enter a new task..." />
-      <textarea id="taskDesc" placeholder="Task description (optional)"></textarea>
-      <input type="text" id="dueDate" placeholder="Due date (YYYY-MM-DD)" />
-      <select id="priority">
-        <option value="low">Low Priority</option>
-        <option value="medium">Medium Priority</option>
-        <option value="high">High Priority</option>
-      </select>
-      <input type="text" id="categoryInput" placeholder="Category (e.g. Work)" />
-      <select id="recurring">
-        <option value="none">No Recurrence</option>
-        <option value="daily">Daily</option>
-        <option value="weekly">Weekly</option>
-        <option value="monthly">Monthly</option>
+    <!-- Add Task Section -->
+    <div class="task-input">
+      <input type="text" id="taskInput" placeholder="Enter a new task">
+      <input type="text" id="taskCategory" placeholder="Category">
+      <input type="text" id="taskDueDate" placeholder="Due Date (YYYY-MM-DD)">
+      <select id="taskPriority">
+        <option value="low">Low</option>
+        <option value="medium" selected>Medium</option>
+        <option value="high">High</option>
       </select>
       <button id="addTaskBtn">Add Task</button>
     </div>
 
-    <!-- Export / Import -->
-    <div class="export-import">
-      <button id="exportTasks">Export Tasks</button>
-      <input type="file" id="importTasks" />
+    <!-- Search bar -->
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search tasks...">
     </div>
+
+    <!-- Counter -->
+    <p id="taskCounter">0 tasks left</p>
 
     <!-- Task List -->
     <ul id="taskList"></ul>
 
-    <button id="clearCompleted">Clear Completed Tasks</button>
+    <!-- Controls -->
+    <div class="controls">
+      <button id="clearCompletedBtn">Clear Completed</button>
+    </div>
   </div>
 
   <script src="app.js"></script>
