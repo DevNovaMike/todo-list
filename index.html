@@ -1,48 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modern To-Do List</title>
+  <title>My To-Do List</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app-container">
     <header>
       <h1>My To-Do List</h1>
-      <button id="darkModeToggle">🌙 Dark Mode</button>
+      <button id="dark-mode-toggle">🌙</button>
     </header>
 
-    <!-- Add Task Section -->
-    <div class="task-input">
-      <input type="text" id="taskInput" placeholder="Enter a new task">
-      <input type="text" id="taskCategory" placeholder="Category">
-      <input type="text" id="taskDueDate" placeholder="Due Date (YYYY-MM-DD)">
-      <select id="taskPriority">
-        <option value="low">Low</option>
-        <option value="medium" selected>Medium</option>
-        <option value="high">High</option>
-      </select>
-      <button id="addTaskBtn">Add Task</button>
-    </div>
+    <div class="todo-container">
+      <div class="input-group">
+        <input type="text" id="task-input" placeholder="Enter a new task">
+        <input type="text" id="category-input" placeholder="Category">
+        <input type="text" id="date-input" placeholder="Due Date (YYYY-MM-DD)">
+        <select id="priority-input">
+          <option value="Low">Low</option>
+          <option value="Medium" selected>Medium</option>
+          <option value="High">High</option>
+        </select>
+        <button id="add-task-btn">Add Task</button>
+      </div>
 
-    <!-- Search bar -->
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="Search tasks...">
-    </div>
+      <input type="text" id="search-input" placeholder="Search tasks...">
 
-    <!-- Counter -->
-    <p id="taskCounter">0 tasks left</p>
+      <ul id="task-list"></ul>
 
-    <!-- Task List -->
-    <ul id="taskList"></ul>
-
-    <!-- Controls -->
-    <div class="controls">
-      <button id="clearCompletedBtn">Clear Completed</button>
+      <div class="footer">
+        <span id="task-count">0 tasks left</span>
+        <button id="clear-completed">Clear Completed</button>
+      </div>
     </div>
   </div>
-
   <script src="app.js"></script>
 </body>
 </html>
