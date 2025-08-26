@@ -1,39 +1,35 @@
-// Selectors
-const taskInput = document.getElementById("taskInput");
-const taskCategory = document.getElementById("taskCategory");
-const taskDueDate = document.getElementById("taskDueDate");
-const taskPriority = document.getElementById("taskPriority");
-const addTaskBtn = document.getElementById("addTaskBtn");
-const taskList = document.getElementById("taskList");
-const taskCounter = document.getElementById("taskCounter");
-const clearCompletedBtn = document.getElementById("clearCompletedBtn");
-const searchInput = document.getElementById("searchInput");
-const darkModeToggle = document.getElementById("darkModeToggle");
+// Elements
+const taskInput = document.getElementById("task-input");
+const categoryInput = document.getElementById("category-input");
+const dateInput = document.getElementById("date-input");
+const priorityInput = document.getElementById("priority-input");
+const addTaskBtn = document.getElementById("add-task-btn");
+const taskList = document.getElementById("task-list");
+const taskCount = document.getElementById("task-count");
+const clearCompletedBtn = document.getElementById("clear-completed");
+const searchInput = document.getElementById("search-input");
+const darkModeToggle = document.getElementById("dark-mode-toggle");
 
-// Load tasks & dark mode
+// Load tasks
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-let darkMode = localStorage.getItem("darkMode") === "enabled";
-
-if (darkMode) document.body.classList.add("dark-mode");
 renderTasks();
 
-// Add task
+// Add Task
 addTaskBtn.addEventListener("click", () => {
-  const text = taskInput.value.trim();
-  const category = taskCategory.value.trim();
-  const dueDate = taskDueDate.value.trim();
-  const priority = taskPriority.value;
+  const taskText = taskInput.value.trim();
+  const category = categoryInput.value.trim();
+  const dueDate = dateInput.value.trim();
+  const priority = priorityInput.value;
 
-  if (text === "") return;
+  if (taskText === "") return;
 
   const task = {
     id: Date.now(),
-    text,
+    text: taskText,
     category,
     dueDate,
     priority,
-    completed: false,
-    subtasks: []
+    completed: false
   };
 
   tasks.push(task);
@@ -41,93 +37,64 @@ addTaskBtn.addEventListener("click", () => {
   renderTasks();
 
   taskInput.value = "";
-  taskCategory.value = "";
-  taskDueDate.value = "";
-  taskPriority.value = "medium";
+  categoryInput.value = "";
+  dateInput.value = "";
+  priorityInput.value = "Medium";
 });
 
-// Render tasks
+// Render Tasks
 function renderTasks() {
   taskList.innerHTML = "";
-
   const searchTerm = searchInput.value.toLowerCase();
-  let activeCount = 0;
 
-  tasks.forEach(task => {
-    if (!task.text.toLowerCase().includes(searchTerm)) return;
+  tasks
+    .filter(t => t.text.toLowerCase().includes(searchTerm))
+    .forEach(task => {
+      const li = document.createElement("li");
+      li.className = `task ${task.priority.toLowerCase()}`;
+      if (task.completed) li.classList.add("completed");
 
-    const li = document.createElement("li");
-    li.className = `task-item ${task.completed ? "completed" : ""}`;
-
-    const mainDiv = document.createElement("div");
-    mainDiv.className = "task-main";
-
-    // Checkbox
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = task.completed;
-    checkbox.addEventListener("change", () => {
-      task.completed = checkbox.checked;
-      saveTasks();
-      renderTasks();
+      li.innerHTML = `
+        <span>
+          <strong>${task.text}</strong> 
+          ${task.category ? ` - [${task.category}]` : ""}
+          ${task.dueDate ? ` <em>(${task.dueDate})</em>` : ""}
+        </span>
+        <div>
+          <button onclick="toggleComplete(${task.id})">✔</button>
+          <button onclick="deleteTask(${task.id})">✖</button>
+        </div>
+      `;
+      taskList.appendChild(li);
     });
 
-    // Task text
-    const span = document.createElement("span");
-    span.textContent = task.text;
+  updateCount();
+}
 
-    // Badges
-    if (task.category) {
-      const catBadge = document.createElement("span");
-      catBadge.className = "badge category";
-      catBadge.textContent = task.category;
-      span.appendChild(catBadge);
-    }
-    if (task.priority) {
-      const priBadge = document.createElement("span");
-      priBadge.className = `badge ${task.priority}`;
-      priBadge.textContent = task.priority;
-      span.appendChild(priBadge);
-    }
+// Toggle complete
+function toggleComplete(id) {
+  const task = tasks.find(t => t.id === id);
+  task.completed = !task.completed;
+  saveTasks();
+  renderTasks();
+}
 
-    if (task.dueDate) {
-      const dueSpan = document.createElement("small");
-      dueSpan.textContent = `Due: ${task.dueDate}`;
-      span.appendChild(dueSpan);
+// Delete task
+function deleteTask(id) {
+  tasks = tasks.filter(t => t.id !== id);
+  saveTasks();
+  renderTasks();
+}
 
-      // Highlight if due today
-      const today = new Date().toISOString().split("T")[0];
-      if (task.dueDate === today && !task.completed) {
-        li.style.border = "2px solid red";
-      }
-    }
-
-    // Delete button
-    const delBtn = document.createElement("button");
-    delBtn.textContent = "❌";
-    delBtn.addEventListener("click", () => {
-      tasks = tasks.filter(t => t.id !== task.id);
-      saveTasks();
-      renderTasks();
-    });
-
-    mainDiv.appendChild(checkbox);
-    mainDiv.appendChild(span);
-    mainDiv.appendChild(delBtn);
-
-    li.appendChild(mainDiv);
-
-    taskList.appendChild(li);
-
-    if (!task.completed) activeCount++;
-  });
-
-  taskCounter.textContent = `${activeCount} tasks left`;
+// Update count
+function updateCount() {
+  const remaining = tasks.filter(t => !t.completed).length;
+  taskCount.textContent = `${remaining} task${remaining !== 1 ? "s" : ""} left`;
 }
 
 // Clear completed
 clearCompletedBtn.addEventListener("click", () => {
-  tasks = tasks.filter(task => !task.completed);
+  tasks = tasks.filter(t => !t.completed);
   saveTasks();
   renderTasks();
 });
@@ -135,14 +102,18 @@ clearCompletedBtn.addEventListener("click", () => {
 // Search
 searchInput.addEventListener("input", renderTasks);
 
-// Dark mode toggle
-darkModeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-  darkMode = document.body.classList.contains("dark-mode");
-  localStorage.setItem("darkMode", darkMode ? "enabled" : "disabled");
-});
-
-// Save tasks
+// Save
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+// Dark mode
+darkModeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  localStorage.setItem("darkMode", document.body.classList.contains("dark"));
+});
+
+// Load dark mode setting
+if (localStorage.getItem("darkMode") === "true") {
+  document.body.classList.add("dark");
 }
